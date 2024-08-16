@@ -32,20 +32,3 @@ def billetemataobelisco ():
         ab *= 2
         dias += 1
     return dias
-        
-# 13:00 - 16:00
-
-import random
-
-prueba = random.random()
-print(prueba)
-prueba = random.random()
-print(prueba)
-prueba = random.random()
-print(prueba)
-
-random.seed(2)
-prueba = random.random()
-print(prueba)
-prueba = random.random()
-print(prueba)
