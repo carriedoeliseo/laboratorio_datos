@@ -6,6 +6,8 @@ Created on Fri Aug 16 10:09:45 2024
 @author: Estudiante
 """
 
+# 9:00 - 12:00
+
 ''' Ejercicio, programa que decida si una palabra de longitud 5 es palindromo. '''
 
 def palindromo (a):
@@ -31,4 +33,19 @@ def billetemataobelisco ():
         dias += 1
     return dias
         
+# 13:00 - 16:00
 
+import random
+
+prueba = random.random()
+print(prueba)
+prueba = random.random()
+print(prueba)
+prueba = random.random()
+print(prueba)
+
+random.seed(2)
+prueba = random.random()
+print(prueba)
+prueba = random.random()
+print(prueba)
