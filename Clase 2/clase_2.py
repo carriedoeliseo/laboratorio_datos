@@ -89,6 +89,12 @@ def dataframe1 ():
 
 ''' ^ Dataframe desde un diccionario '''
 
+# PRACTICA 2
+
+
+
+
+
 
 
     
