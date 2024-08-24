@@ -67,7 +67,80 @@ def leer_parque (nombre_archivo, parque):
 
 #%% Practica 2 - 2
 
+def especies (lista_arboles):
+    sol = []
+    for arbol in lista_arboles:
+        sol.append(arbol['nombre_com'])
+    return sol
 
+#%% Practica 2 - 3
+
+def contar_ejemplares (lista_arboles):
+    sol = {}
+    for especie in especies(lista_arboles):
+        if especie in sol.keys():
+            sol[especie] += 1
+        else:
+            sol[especie] = 1
+    return sol
+
+#%% Practica 2 - 4
+
+def obtener_alturas (lista_arboles, especie):
+    sol = []
+    for arbol in lista_arboles:
+        if arbol['nombre_com'] == especie:
+            sol.append(float(arbol['altura_tot']))
+    return sol
+
+nombre_archivo = 'Clase 2/arbolado-en-espacios-verdes.csv'
+
+# General Paz
+gral_paz = leer_parque(nombre_archivo, 'GENERAL PAZ')
+alturas_gralpaz = obtener_alturas(gral_paz, 'Jacarandá')
+max_altura_gralpaz = max(alturas_gralpaz)
+prom_altura_gralpaz = sum(alturas_gralpaz)/contar_ejemplares(gral_paz)['Jacarandá']
+
+# Parque los Andes
+losandes = leer_parque(nombre_archivo, 'ANDES, LOS')
+alturas_losandes = obtener_alturas(losandes, 'Jacarandá')
+max_altura_losandes = max(alturas_losandes)
+prom_altura_losandes = sum(alturas_losandes)/contar_ejemplares(losandes)['Jacarandá']
+
+# Centenario
+centenario = leer_parque(nombre_archivo, 'CENTENARIO')
+alturas_centenario = obtener_alturas(centenario, 'Jacarandá')
+max_altura_centenario = max(alturas_centenario)
+prom_altura_centenario = sum(alturas_centenario)/contar_ejemplares(centenario)['Jacarandá']
+        
+#%% Practica 2 - 5
+
+def obtener_inclinaciones (lista_arboles, especie):
+    sol = []
+    for arbol in lista_arboles:
+        if arbol['nombre_com'] == especie:
+            sol.append(float(arbol['inclinacio']))
+    return sol
+
+#%% Practica 2 - 6
+
+def especimen_mas_inclinado (lista_arboles):
+    especies_unique = pd.Series(especies(lista_arboles)).unique()
+    actual = 0
+    sol = ''
+    for especie in especies_unique:
+        inclinaciones = obtener_inclinaciones(lista_arboles, especie)
+        if max(inclinaciones) >= actual:
+            actual = max(inclinaciones)
+            sol = especie
+    return sol, actual
+            
+#%% Practica 2 - 7
+
+        
+        
+        
+        
 
 
 
