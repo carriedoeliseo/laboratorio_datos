@@ -9,7 +9,7 @@ Created on Fri Aug 23 13:17:10 2024
 
 import pandas as pd
 
-arbolado = pd.read_csv('./Clase 2/arbolado-en-espacios-verdes.csv')
+arbolado = pd.read_csv('Clase 2/arbolado-en-espacios-verdes.csv')
 
 #%% Ejercicio Clase
 
@@ -46,8 +46,29 @@ prom_diam_palosborrachos = sum(palosborrachos['diametro'])/num_palosborrachos
 
 def cantidad_arboles (parque):
     arbolado = pd.read_csv('./Clase 2/arbolado-en-espacios-verdes.csv')
-    parque_frame = arbolado()
+    parque_dframe = arbolado[arbolado['espacio_ve'].isin([parque])]
+    return len(parque_dframe.index)
 
+def cantidad_nativos (parque):
+    arbolado = pd.read_csv('./Clase 2/arbolado-en-espacios-verdes.csv')
+    parque_dframe = arbolado[arbolado['espacio_ve'].isin([parque]) & 
+                            arbolado['origen'].isin(['Nativo/Autóctono'])]
+    return len(parque_dframe.index)
+    
 #%% Practica 2 - 1
+
+def leer_parque (nombre_archivo, parque):
+    dframe = pd.read_csv(nombre_archivo)
+    parque_dframe = dframe[dframe['espacio_ve'].isin([parque])]
+    sol = []
+    for i in range (len(parque_dframe.index)):
+        sol.append(parque_dframe.iloc[i].to_dict())
+    return sol
+
+#%% Practica 2 - 2
+
+
+
+
 
     
