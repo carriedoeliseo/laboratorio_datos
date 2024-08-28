@@ -9,15 +9,20 @@ Created on Fri Aug 23 13:17:10 2024
 
 import pandas as pd
 
-arbolado = pd.read_csv('Clase 2/arbolado-en-espacios-verdes.csv')
+arbolado_par = pd.read_csv('Clase 2/arbolado-en-espacios-verdes.csv')
+arbolado_ver = pd.read_csv('./Clase 2/arbolado-publico-lineal-2017-2018.csv')
+arbolado_ver = arbolado_ver[['nombre_cientifico', 
+                             'ancho_acera', 
+                             'diametro_altura_pecho',
+                             'altura_arbol']]
 
 #%% Ejercicio Clase
 
-nombres_com = sorted(arbolado['nombre_com'].unique())
+nombres_com = sorted(arbolado_par['nombre_com'].unique())
 
 # Jacarandás
-niveles_jacarandas = arbolado['nombre_com'].isin(['Jacarandá'])
-jacarandas = arbolado[niveles_jacarandas]
+niveles_jacarandas = arbolado_par['nombre_com'].isin(['Jacarandá'])
+jacarandas = arbolado_par[niveles_jacarandas]
 num_jacarandas = len(jacarandas.index)
 
 max_alt_jacarandas = max(jacarandas['altura_tot'])
@@ -30,10 +35,10 @@ prom_diam_jacarandas = sum(jacarandas['diametro'])/num_jacarandas
 
 
 # Palos borrachos
-niveles_palosborrachos = arbolado['nombre_com'].isin(['Palo borracho',
+niveles_palosborrachos = arbolado_par['nombre_com'].isin(['Palo borracho',
                                                       'Palo borracho rosado',
                                                       'Palo borracho blanco'])
-palosborrachos = arbolado[niveles_palosborrachos]
+palosborrachos = arbolado_par[niveles_palosborrachos]
 num_palosborrachos = len(palosborrachos.index)
 
 max_alt_palosborrachos = max(palosborrachos['altura_tot'])
@@ -93,22 +98,20 @@ def obtener_alturas (lista_arboles, especie):
             sol.append(float(arbol['altura_tot']))
     return sol
 
-nombre_archivo = 'Clase 2/arbolado-en-espacios-verdes.csv'
-
 # General Paz
-gral_paz = leer_parque(nombre_archivo, 'GENERAL PAZ')
+gral_paz = leer_parque(arbolado_par, 'GENERAL PAZ')
 alturas_gralpaz = obtener_alturas(gral_paz, 'Jacarandá')
 max_altura_gralpaz = max(alturas_gralpaz)
 prom_altura_gralpaz = sum(alturas_gralpaz)/contar_ejemplares(gral_paz)['Jacarandá']
 
 # Parque los Andes
-losandes = leer_parque(nombre_archivo, 'ANDES, LOS')
+losandes = leer_parque(arbolado_par, 'ANDES, LOS')
 alturas_losandes = obtener_alturas(losandes, 'Jacarandá')
 max_altura_losandes = max(alturas_losandes)
 prom_altura_losandes = sum(alturas_losandes)/contar_ejemplares(losandes)['Jacarandá']
 
 # Centenario
-centenario = leer_parque(nombre_archivo, 'CENTENARIO')
+centenario = leer_parque(arbolado_par, 'CENTENARIO')
 alturas_centenario = obtener_alturas(centenario, 'Jacarandá')
 max_altura_centenario = max(alturas_centenario)
 prom_altura_centenario = sum(alturas_centenario)/contar_ejemplares(centenario)['Jacarandá']
@@ -137,8 +140,52 @@ def especimen_mas_inclinado (lista_arboles):
             
 #%% Practica 2 - 7
 
-        
-        
+def especie_promedio_mas_inclinada (lista_arboles):
+    especies_unique = pd.Series(especies(lista_arboles)).unique()
+    actual = 0
+    sol = ''
+    for especie in especies_unique:
+        inclinaciones = obtener_inclinaciones(lista_arboles, especie)
+        prom_inclinaciones = sum(inclinaciones)/len(inclinaciones)
+        if prom_inclinaciones >= actual:
+            actual = prom_inclinaciones
+            sol = especie
+    return sol, actual
+
+#%% Practica 2 - 8
+
+tipa_arbolado_par = arbolado_par.copy()
+tipa_arbolado_par = tipa_arbolado_par[tipa_arbolado_par['nombre_cie'] == 'Tipuana Tipu']
+tipa_arbolado_par = tipa_arbolado_par[['nombre_cie', 'altura_tot', 'diametro']]
+
+tipa_arbolado_ver = arbolado_ver.copy()
+tipa_arbolado_ver = tipa_arbolado_ver[tipa_arbolado_ver['nombre_cientifico'] == 'Tipuana tipu']
+tipa_arbolado_ver = tipa_arbolado_ver[['nombre_cientifico', 'diametro_altura_pecho', 'altura_arbol']]
+tipa_arbolado_ver.columns = tipa_arbolado_par.columns
+tipa_arbolado_ver.nombre_cie = tipa_arbolado_par.nombre_cie.iloc[0]
+
+#%% Practica 2 - 9
+
+tipa_arbolado_par['ambiente'] = 'parque'
+tipa_arbolado_ver['ambiente'] = 'vereda'
+
+#%% Practica 2 - 10
+
+tipa_arbolado = pd.concat([tipa_arbolado_par, tipa_arbolado_ver])
+
+#%% Practica 2 - 11
+
+tipa_altura_sort = tipa_arbolado.sort_values(by = 'altura_tot', ascending=False).reset_index(drop=True)
+print(tipa_altura_sort[tipa_altura_sort['ambiente'] == 'parque'].head())
+# Las tipas son más altas en las veredas.
+# Tipa de parque más alta tiene posicion #6090/13361 en el df
+
+tipa_diametro_sort = tipa_arbolado.sort_values(by = 'diametro', ascending=False).reset_index(drop=True)
+print(tipa_diametro_sort[tipa_diametro_sort['ambiente'] == 'vereda'].head())
+# Las tipas son más anchas en los parques.
+# Tipa de vereda más ancha tiene posicion #2989/13361 en el df
+
+
         
         
 
