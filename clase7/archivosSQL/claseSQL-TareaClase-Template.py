@@ -393,37 +393,53 @@ dataframeResultado = sql^ consultaSQL
 # Ejercicio 03.1.- Devolver el nombre de la ciudad de partida del vuelo número 165
 
 consultaSQL = """
-
+                SELECT DISTINCT Ciudad
+                FROM vuelo
+                JOIN aeropuerto
+                ON Origen = Codigo
+                WHERE Numero = 165 ;
               """
 
 dataframeResultado = sql^ consultaSQL
+print(dataframeResultado)
 
 #%%-----------
 # Ejercicio 03.2.- Retornar el nombre de las personas que realizaron reservas a un valor menor a $200
 
 consultaSQL = """
-
+                SELECT DISTINCT Nombre
+                FROM pasajero
+                NATURAL JOIN reserva
+                WHERE Precio < 200 ;
               """
 
 dataframeResultado = sql^ consultaSQL
+print(dataframeResultado)
 
 #%%-----------
 # Ejercicio 03.3.- Obtener Nombre, Fecha y Destino del Viaje de todos los pasajeros que vuelan desde Madrid
 
 vuelosAMadrid = sql^"""
-
+                    SELECT DISTINCT *
+                    FROM vuelo
+                    WHERE Origen = 'MAD'
               """
 
 dniPersonasDesdeMadrid = sql^"""
-
+                    SELECT DISTINCT *
+                    FROM vuelosAMadrid
+                    JOIN reserva
+                    ON Numero = NroVuelo
               """
 
 consultaSQL = """
-
+                SELECT DISTINCT Nombre, Fecha, Destino
+                FROM dniPersonasDesdeMadrid
+                NATURAL JOIN pasajero
               """
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%% # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -537,21 +553,36 @@ dataframeResultado = sql^ consultaSQL
 # a1.- Listar a cada alumno que rindió el Parcial-01 y decir si aprobó o no (se aprueba con nota >=4).
     
 consultaSQL = """
-
+                SELECT Nombre, Nota,
+                CASE WHEN Nota >= 4
+                    THEN 'Aprobó'
+                    ELSE 'No Aprobó'
+                END AS Estado
+                FROM examen
+                WHERE Instancia = 'Parcial-01'
+                ORDER BY Nombre ;
               """
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%%-----------
 # a2.- Modificar la consulta anterior para que informe cuántos estudiantes aprobaron/reprobaron en cada instancia.
     
 consultaSQL = """
-
+                SELECT Instancia,
+                CASE WHEN Nota >= 4
+                    THEN 'Aprobó'
+                    ELSE 'No Aprobó'
+                END AS Estado,
+                COUNT(*) AS Cantidad
+                FROM examen
+                GROUP BY Instancia, Estado
+                ORDER BY Instancia, Estado
               """
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%%===========================================================================
 # Ejercicios SQL - Subqueries
@@ -559,32 +590,60 @@ dataframeResultado = sql^ consultaSQL
 #a.- Listar los alumnos que en cada instancia obtuvieron una nota mayor al promedio de dicha instancia
 
 consultaSQL = """
-
+                SELECT e1.Nombre, e1.Instancia, e1.Nota
+                FROM examen AS e1
+                WHERE e1.Nota > (
+                    SELECT AVG(e2.Nota)
+                    FROM examen AS e2
+                    WHERE e2.Instancia = e1.Instancia)
+                ORDER BY Instancia ASC, Nota DESC
               """
 
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%%-----------
 # b.- Listar los alumnos que en cada instancia obtuvieron la mayor nota de dicha instancia
 
 consultaSQL = """
-
+                SELECT e1.Nombre, e1.Instancia, e1.Nota
+                FROM examen AS e1
+                WHERE e1.Nota = (
+                    SELECT MAX(e2.Nota)
+                    FROM examen AS e2
+                    WHERE e2.Instancia = e1.Instancia)
+                ORDER BY Nombre, Instancia, Nota ;
               """
+              
+# OTRA OPCION:
+# SELECT e1.Nombre, e1.Instancia, e1.Nota
+# FROM examen AS e1
+# WHERE e1.Nota >= ALL (
+#     SELECT e2.Nota
+#     FROM examen AS e2
+#     WHERE e2.Instancia = e1.Instancia)
+# ORDER BY Nombre, Instancia, Nota ;
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%%-----------
 # c.- Listar el nombre, instancia y nota sólo de los estudiantes que no rindieron ningún Recuperatorio
 
 consultaSQL = """
-
+                SELECT e1.Nombre, e1.Instancia, e1.Nota
+                FROM examen AS e1
+                WHERE NOT EXISTS (
+                    SELECT e2.Nombre, e2.Instancia
+                    FROM examen AS e2
+                    WHERE e1.Nombre = e2.Nombre AND
+                        e2.Instancia LIKE 'Recuperatorio%')
+                ORDER BY Nombre, Instancia, Nota
               """
 
 dataframeResultado = sql^ consultaSQL
-
+print(dataframeResultado)
 
 #%%===========================================================================
 # Ejercicios SQL - Integrando variables de Python
