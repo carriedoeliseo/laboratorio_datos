@@ -132,7 +132,9 @@ dataframeResultado = sql^ consultaSQL
 #=============================================================================
 # Ejercicio 01.1.- Retornar Codigo y Nombre de los aeropuertos de Londres
 consultaSQL = """
-                
+                SELECT DISTINCT Codigo, Nombre
+                FROM aeropuerto
+                WHERE Ciudad = 'Londres'
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -153,7 +155,9 @@ dataframeResultado = sql^ consultaSQL
 #%% -----------
 # Ejercicio 01.3.- Obtener los números de vuelo que van desde CDG hacia LHR
 consultaSQL = """
-
+                SELECT DISTINCT Numero
+                FROM vuelo
+                WHERE Origen = 'CDG' AND Destino = 'LHR'
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -161,7 +165,9 @@ dataframeResultado = sql^ consultaSQL
 #%% -----------
 # Ejercicio 01.4.- Obtener los números de vuelo que van desde CDG hacia LHR o viceversa
 consultaSQL = """
-
+                SELECT DISTINCT Numero
+                FROM vuelo
+                WHERE (Origen = 'CDG' AND Destino = 'LHR') OR (Origen = 'LHR' AND Destino = 'CDG') 
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -169,7 +175,9 @@ dataframeResultado = sql^ consultaSQL
 #%% -----------
 # Ejercicio 01.5.- Devolver las fechas de reservas cuyos precios son mayores a $200
 consultaSQL = """
-
+                SELECT DISTINCT Fecha
+                FROM reserva
+                WHERE precio > 200
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -191,7 +199,11 @@ dataframeResultado = sql^ consultaSQL
 # a1.- Listar a los alumnos que cursan BDs o TLENG
 
 consultaSQL = """
-
+                SELECT DISTINCT *
+                FROM alumnosBD
+                UNION
+                SELECT DISTINCT *
+                FROM alumnosTLeng
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -201,7 +213,11 @@ dataframeResultado = sql^ consultaSQL
 # a2.- Listar a los alumnos que cursan BDs o TLENG (usando UNION ALL)
 
 consultaSQL = """
-
+                SELECT DISTINCT *
+                FROM alumnosBD
+                UNION ALL
+                SELECT DISTINCT *
+                FROM alumnosTLeng
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -210,7 +226,11 @@ dataframeResultado = sql^ consultaSQL
 # b.- Listar a los alumnos que cursan simultáneamente BDs y TLENG
 
 consultaSQL = """
-
+                SELECT DISTINCT *
+                FROM alumnosBD
+                INTERSECT
+                SELECT DISTINCT *
+                FROM alumnosTLeng
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -219,7 +239,11 @@ dataframeResultado = sql^ consultaSQL
 # c.- Listar a los alumnos que cursan BDs y no cursan TLENG 
 
 consultaSQL = """
-
+                SELECT DISTINCT *
+                FROM alumnosBD
+                EXCEPT
+                SELECT DISTINCT *
+                FROM alumnosTLeng
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -241,7 +265,11 @@ dataframeResultado = sql^ consultaSQL
 #=============================================================================
 # Ejercicio 02.1.- Devolver los números de vuelo que tienen reservas generadas (utilizar intersección)
 consultaSQL = """
-
+                SELECT DISTINCT Numero
+                FROM vuelo
+                INTERSECT
+                SELECT DISTINCT NroVuelo
+                FROM reserva
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -249,7 +277,11 @@ dataframeResultado = sql^ consultaSQL
 #%%-----------
 # Ejercicio 02.2.- Devolver los números de vuelo que aún no tienen reservas
 consultaSQL = """
-
+                SELECT DISTINCT Numero
+                FROM vuelo
+                EXCEPT
+                SELECT DISTINCT NroVuelo
+                FROM reserva
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -257,7 +289,11 @@ dataframeResultado = sql^ consultaSQL
 #%%-----------
 # Ejercicio 02.3.- Retornar los códigos de aeropuerto de los que parten o arriban los vuelos
 consultaSQL = """
-
+                SELECT DISTINCT Destino as Codigos
+                FROM vuelo
+                UNION
+                SELECT DISTINCT Origen
+                FROM vuelo
               """
               
 dataframeResultado = sql^ consultaSQL
