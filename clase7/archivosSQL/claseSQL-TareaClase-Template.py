@@ -65,7 +65,8 @@ print(dataframeResultado)
 #=============================================================================
 # a.- Listar DNI y Salario de empleados 
 consultaSQL = """
-                
+                SELECT DNI, Salario
+                FROM empleado ;
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -73,7 +74,8 @@ dataframeResultado = sql^ consultaSQL
 #%%-----------
 # b.- Listar Sexo de empleados 
 consultaSQL = """
-
+                SELECT DISTINCT Sexo
+                FROM empleado ;
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -81,7 +83,8 @@ dataframeResultado = sql^ consultaSQL
 #%%-----------
 #c.- Listar Sexo de empleados (sin DISTINCT)
 consultaSQL = """
-
+                SELECT Sexo
+                FROM empleado ;
               """
 
 dataframeResultado = sql^ consultaSQL
@@ -91,7 +94,7 @@ dataframeResultado = sql^ consultaSQL
 #=============================================================================
 # a.- Listar de EMPLEADO sólo aquellos cuyo sexo es femenino
 consultaSQL = """
-
+                
               """
 
 dataframeResultado = sql^ consultaSQL
