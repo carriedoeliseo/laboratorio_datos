@@ -597,7 +597,7 @@ consultaSQL = """
                        d.id_provincia,
                        p.descripcion AS provincia,
                        c19.casos_2019,
-                       c20.casos_2020,
+                       c20.casos_2020
                 FROM departamento AS d
                 LEFT OUTER JOIN casos_2019 AS c19 ON d.id = c19.id_depto
                 LEFT OUTER JOIN casos_2020 AS c20 ON d.id = c20.id_depto
@@ -611,4 +611,11 @@ AAAresultado =  sql^ consultaSQL
 del casos_2019
 del casos_2020
 
+#%% ===========================================================================
+
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# #                              EJERCICIO E                              # #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+#%% EJERCICIO Da ==============================================================
 
